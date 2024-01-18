@@ -51,6 +51,8 @@ function calcularSalarioPromedio(arrayDeInputs) {
 
 function validarSalario(inputs) {
   let condicionDeCorte = true
+  let textoError = document.querySelector("#texto-error")
+
   inputs.forEach(function (input) {
     let salario = Number(input.value)
     let simboloNoPermitidos = /[a-z],\./.test(input)
@@ -58,15 +60,20 @@ function validarSalario(inputs) {
     if (salario < 0) {
       input.classList.add("error")
       condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
     }
     if (salario == simboloNoPermitidos) {
       input.classList.add("error")
       condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
     }
   })
 
   if (!condicionDeCorte) {
-    let textoError = document.querySelector("#texto-error")
     textoError.className = "texto-error"
   }
   return condicionDeCorte
@@ -87,11 +94,11 @@ function calcularSalario(arrayDeInputs) {
 function enviar() {
   let cantidadDeFamiliares = Number(document.querySelector("#cantidad").value);
   let aparecerCalcular = document.querySelector("#calcular")
-  aparecerCalcular.className = "aparecer-calcular"
+  aparecerCalcular.className = "boton"
   let aparecerEliminar = document.querySelector("#eliminar")
-  aparecerEliminar.className = "aparecer-eliminar"
+  aparecerEliminar.className = "boton"
   let aparecerAgregar = document.querySelector("#agregar")
-  aparecerAgregar.className = "aparecer-agregar"
+  aparecerAgregar.className = "boton"
 
   for (let index = 0; index < cantidadDeFamiliares; index++) {
     let br = document.createElement("br");
