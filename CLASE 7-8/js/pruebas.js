@@ -1,8 +1,5 @@
 function probarValidarNombre() {
-  console.assert(
-    validarNombre("") === "tenes que ingresar tu nombre",
-    "validar nombre no funciono con un string vacio"
-  );
+  console.assert(validarNombre("") === "tenes que ingresar tu nombre","validar nombre no funciono con un string vacio");
 
   console.assert(
     validarNombre("dwdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") === "el nombre no puede contener 50 caracteres o mas",

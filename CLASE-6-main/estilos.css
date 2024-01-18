@@ -1,0 +1,42 @@
+.form {
+    text-align: center;
+    background-color:blue;
+    padding: 100px 50px;
+}
+
+.em {
+    font-size: 30px;
+    margin: 10px;
+    padding: 20px;
+    color: aqua;
+}
+
+label {
+    font-size: 20px;
+    color: aqua;
+}
+
+.ocultar {
+    display: none;
+}
+
+.error {
+    border: solid 2px red;
+}
+
+.texto-error {
+    color: red;
+    font-size: 25px;
+}
+
+.boton {
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: aqua;
+    color: blue;
+    border: 3px dashed black;
+}
+
+input {
+    border: 3px dashed black;
+}
