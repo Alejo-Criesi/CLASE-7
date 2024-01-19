@@ -7,89 +7,32 @@ Punto bonus: si hay inputs vacíos, ignorarlos en el cálculo (no contarlos como
 */
 
 let form = document.querySelector("#form");
+
 let botonCalcular = document.querySelector("#calcular");
+
 let botonAgregar = document.querySelector("#agregar");
+
 let botonEliminar = document.querySelector("#eliminar");
+
 let botonEnviar = document.querySelector("#enviar");
 
-function calcularSalarioMayor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador >= arrayDeInputs[index]) {
-      numeroComparador = numeroComparador;
-    } else {
-      numeroComparador = arrayDeInputs[index];
-    }
-  }
-  return numeroComparador;
-}
+botonEnviar.onclick = function () {
+  enviar()
+};
 
-function calcularSalarioMenor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
+botonCalcular.onclick = function () {
+  calcular()
+};
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador <= arrayDeInputs[index]) {
-      numeroComparador = numeroComparador;
-    } else {
-      numeroComparador = arrayDeInputs[index];
-    }
-  }
-  return numeroComparador;
-}
 
-function calcularSalarioPromedio(arrayDeInputs) {
-  let contador = 0;
+botonAgregar.onclick = function () {
+  agregar()
+};
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    contador = contador + arrayDeInputs[index];
-  }
 
-  let salarioPromedio = contador / arrayDeInputs.length;
-
-  return salarioPromedio;
-}
-
-function validarSalario(inputs) {
-  let condicionDeCorte = true
-  let textoError = document.querySelector("#texto-error")
-
-  inputs.forEach(function (input) {
-    let salario = Number(input.value)
-    let simboloNoPermitidos = /[a-z],\./.test(input)
-
-    if (salario < 0) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-    if (salario == simboloNoPermitidos) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-  })
-
-  if (!condicionDeCorte) {
-    textoError.className = "texto-error"
-  }
-  return condicionDeCorte
-}
-
-function calcularSalario(arrayDeInputs) {
-  let em = document.querySelector("em");
-  em.textContent =
-    "el miembro con el salario mas alto cobra " +
-    calcularSalarioMayor(arrayDeInputs) +
-    " pesos, el miembro con el salario mas bajo cobra " +
-    calcularSalarioMenor(arrayDeInputs) +
-    " pesos, y el salario promedio en el grupo familiar es de " +
-    calcularSalarioPromedio(arrayDeInputs) +
-    " pesos";
-}
+botonEliminar.onclick = function () {
+  eliminar()
+};
 
 function enviar() {
   let cantidadDeFamiliares = Number(document.querySelector("#cantidad").value);
@@ -182,20 +125,81 @@ function agregar() {
   form.appendChild(input);
 }
 
-botonEnviar.onclick = function () {
-  enviar()
-};
+function validarSalario(inputs) {
+  let condicionDeCorte = true
+  let textoError = document.querySelector("#texto-error")
 
-botonCalcular.onclick = function () {
-  calcular()
-};
+  inputs.forEach(function (input) {
+    let salario = Number(input.value)
+    let simboloNoPermitidos = /[a-z],\./.test(input)
 
+    if (salario < 0) {
+      input.classList.add("error")
+      condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
+    }
+    if (salario == simboloNoPermitidos) {
+      input.classList.add("error")
+      condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
+    }
+  })
 
-botonAgregar.onclick = function () {
-  agregar()
-};
+  if (!condicionDeCorte) {
+    textoError.className = "texto-error"
+  }
+  return condicionDeCorte
+}
 
+function calcularSalario(arrayDeInputs) {
+  let em = document.querySelector("em");
+  em.textContent =
+    "el miembro con el salario mas alto cobra " +
+    calcularSalarioMayor(arrayDeInputs) +
+    " pesos, el miembro con el salario mas bajo cobra " +
+    calcularSalarioMenor(arrayDeInputs) +
+    " pesos, y el salario promedio en el grupo familiar es de " +
+    calcularSalarioPromedio(arrayDeInputs) +
+    " pesos";
+}
 
-botonEliminar.onclick = function () {
-  eliminar()
-};
+function calcularSalarioMayor(arrayDeInputs) {
+  let numeroComparador = arrayDeInputs[0];
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    if (numeroComparador >= arrayDeInputs[index]) {
+      numeroComparador = numeroComparador;
+    } else {
+      numeroComparador = arrayDeInputs[index];
+    }
+  }
+  return numeroComparador;
+}
+
+function calcularSalarioMenor(arrayDeInputs) {
+  let numeroComparador = arrayDeInputs[0];
+
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    if (numeroComparador <= arrayDeInputs[index]) {
+      numeroComparador = numeroComparador;
+    } else {
+      numeroComparador = arrayDeInputs[index];
+    }
+  }
+  return numeroComparador;
+}
+
+function calcularSalarioPromedio(arrayDeInputs) {
+  let contador = 0;
+
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    contador = contador + arrayDeInputs[index];
+  }
+
+  let salarioPromedio = contador / arrayDeInputs.length;
+
+  return salarioPromedio;
+}

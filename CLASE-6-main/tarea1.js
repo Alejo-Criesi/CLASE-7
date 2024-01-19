@@ -14,87 +14,17 @@ let botonEliminar = document.querySelector("#eliminar");
 
 let botonEnviar = document.querySelector("#enviar");
 
-function calcularEdadMayor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
+botonEnviar.onclick = function () {
+  enviar()
+};
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador <= arrayDeInputs[index]) {
-      numeroComparador = arrayDeInputs[index];
-    } else {
-      numeroComparador = numeroComparador;
-    }
-  }
-  return numeroComparador;
-}
+botonCalcular.onclick = function () {
+  calcular()
+};
 
-function calcularEdadMenor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
-
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador >= arrayDeInputs[index]) {
-      numeroComparador = arrayDeInputs[index];
-    } else {
-      numeroComparador = numeroComparador;
-    }
-  }
-  return numeroComparador;
-}
-
-function calcularEdadPromedio(arrayDeInputs) {
-  let contador = 0;
-
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    contador = contador + arrayDeInputs[index];
-  }
-
-  let edadPromedio = contador / arrayDeInputs.length;
-
-  return edadPromedio;
-}
-
-function validarEdad(inputs) {
-  let condicionDeCorte = true
-  let textoError = document.querySelector("#texto-error")
-
-  inputs.forEach(function (input) {
-    let edad = Number(input.value)
-    let simboloNoPermitidos = /[a-z],\./.test(edad)
-
-    if (edad <= 0) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-
-    if (edad == simboloNoPermitidos) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-  })
-
-  if (!condicionDeCorte) {
-    textoError.className = "texto-error"
-  }
-
-  return condicionDeCorte
-}
-
-function calcularEdad(arrayDeInputs) {
-  let em = document.querySelector("em");
-  em.textContent =
-    "el miembro con mas edad tiene " +
-    calcularEdadMayor(arrayDeInputs) +
-    " años, el miembro menor tiene " +
-    calcularEdadMenor(arrayDeInputs) +
-    " años y la edad promedio en el grupo familiar es de " +
-    calcularEdadPromedio(arrayDeInputs) +
-    " años";
-}
+botonEliminar.onclick = function () {
+  eliminar()
+};
 
 function enviar() {
   let cantidadDeFamiliares = Number(document.querySelector("#cantidad").value);
@@ -159,17 +89,86 @@ function eliminar() {
   em.textContent =
     "aca va a aparecer la edad mayor, menor y la promedio del grupo familiar"
   textoError.className = "ocultar"
-
 }
 
-botonEnviar.onclick = function () {
-  enviar()
-};
+function validarEdad(inputs) {
+  let condicionDeCorte = true
+  let textoError = document.querySelector("#texto-error")
 
-botonCalcular.onclick = function () {
-  calcular()
-};
+  inputs.forEach(function (input) {
+    let edad = Number(input.value)
+    let simboloNoPermitidos = /[a-z],\./.test(edad)
 
-botonEliminar.onclick = function () {
-  eliminar()
-};
+    if (edad <= 0) {
+      input.classList.add("error")
+      condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
+    }
+
+    if (edad == simboloNoPermitidos) {
+      input.classList.add("error")
+      condicionDeCorte = false
+    } else {
+      input.classList.toggle("error", false)
+      textoError.classList.replace("texto-error", "ocultar")
+    }
+  })
+
+  if (!condicionDeCorte) {
+    textoError.className = "texto-error"
+  }
+
+  return condicionDeCorte
+}
+
+function calcularEdad(arrayDeInputs) {
+  let em = document.querySelector("em");
+  em.textContent =
+    "el miembro con mas edad tiene " +
+    calcularEdadMayor(arrayDeInputs) +
+    " años, el miembro menor tiene " +
+    calcularEdadMenor(arrayDeInputs) +
+    " años y la edad promedio en el grupo familiar es de " +
+    calcularEdadPromedio(arrayDeInputs) +
+    " años";
+}
+
+function calcularEdadMayor(arrayDeInputs) {
+  let numeroComparador = arrayDeInputs[0];
+
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    if (numeroComparador <= arrayDeInputs[index]) {
+      numeroComparador = arrayDeInputs[index];
+    } else {
+      numeroComparador = numeroComparador;
+    }
+  }
+  return numeroComparador;
+}
+
+function calcularEdadMenor(arrayDeInputs) {
+  let numeroComparador = arrayDeInputs[0];
+
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    if (numeroComparador >= arrayDeInputs[index]) {
+      numeroComparador = arrayDeInputs[index];
+    } else {
+      numeroComparador = numeroComparador;
+    }
+  }
+  return numeroComparador;
+}
+
+function calcularEdadPromedio(arrayDeInputs) {
+  let contador = 0;
+
+  for (let index = 0; index < arrayDeInputs.length; index++) {
+    contador = contador + arrayDeInputs[index];
+  }
+
+  let edadPromedio = contador / arrayDeInputs.length;
+
+  return edadPromedio;
+}
