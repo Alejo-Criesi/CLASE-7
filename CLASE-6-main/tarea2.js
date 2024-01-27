@@ -17,52 +17,56 @@ let botonEliminar = document.querySelector("#eliminar");
 let botonEnviar = document.querySelector("#enviar");
 
 botonEnviar.onclick = function () {
-  enviar()
+  enviarFamiliares();
 };
 
 botonCalcular.onclick = function () {
-  calcular()
+  agruparSalarios();
 };
-
 
 botonAgregar.onclick = function () {
-  agregar()
+  agregarFamiliares();
 };
-
 
 botonEliminar.onclick = function () {
-  eliminar()
+  eliminarTodo();
 };
 
-function enviar() {
+function enviarFamiliares() {
   let cantidadDeFamiliares = Number(document.querySelector("#cantidad").value);
-  let aparecerCalcular = document.querySelector("#calcular")
-  aparecerCalcular.className = "boton"
-  let aparecerEliminar = document.querySelector("#eliminar")
-  aparecerEliminar.className = "boton"
-  let aparecerAgregar = document.querySelector("#agregar")
-  aparecerAgregar.className = "boton"
+  crearFamiliares(cantidadDeFamiliares);
+  aparecerBotones();
+}
 
+function crearFamiliares(cantidadDeFamiliares) {
   for (let index = 0; index < cantidadDeFamiliares; index++) {
-    let br = document.createElement("br");
-    br.className = "br";
-    form.appendChild(br);
-
     let label = document.createElement("label");
     label.textContent = "familiar " + (index + 1);
-    label.className = "label-agregar";
+    label.className = "form-label";
+    label.id = "label-familiar";
     form.appendChild(label);
 
     let input = document.createElement("input");
     input.type = "number";
-    input.className = "input-agregar";
+    input.className = "form-control";
+    input.id = "input-familiar";
+    input.placeholder = "introduzca el salario";
     form.appendChild(input);
   }
 }
 
-function calcular() {
-  let inputs = document.querySelectorAll(".input-agregar");
-  let arrayDeInputs = [];
+function aparecerBotones() {
+  let aparecerCalcular = document.querySelector("#calcular");
+  aparecerCalcular.className = "btn btn-primary";
+  let aparecerEliminar = document.querySelector("#eliminar");
+  aparecerEliminar.className = "btn btn-primary";
+  let aparecerAgregar = document.querySelector("#agregar");
+  aparecerAgregar.className = "btn btn-primary";
+}
+
+function agruparSalarios() {
+  let inputs = document.querySelectorAll("#input-familiar");
+  let salarios = [];
   let arrayDeInputsEnCero = [];
   let valorDelInput;
 
@@ -71,135 +75,140 @@ function calcular() {
     if (valorDelInput === 0) {
       arrayDeInputsEnCero.push(valorDelInput);
     } else {
-      arrayDeInputs.push(valorDelInput);
+      salarios.push(valorDelInput);
     }
   }
 
   if (validarSalario(inputs)) {
-    calcularSalario(arrayDeInputs)
+    mostrarSalarios(salarios);
   }
 }
 
-function eliminar() {
-  let br = document.querySelectorAll(".br");
-  let label = document.querySelectorAll(".label-agregar");
-  let input = document.querySelectorAll(".input-agregar")
-  let em = document.querySelector("em");
-  let textoError = document.querySelector("#texto-error")
-  let ocultarCalcular = document.querySelector("#calcular")
-  let ocultarEliminar = document.querySelector("#eliminar")
-  let ocultarAgregar = document.querySelector("#agregar")
-
-  br.forEach(function (br) {
-    br.remove()
-  })
-
-  label.forEach(function (label) {
-    label.remove();
-  })
-
-  input.forEach(function (input) {
-    input.remove();
-  })
-
-  textoError.className = "ocultar"
-  ocultarCalcular.className = "ocultar"
-  ocultarEliminar.className = "ocultar"
-  ocultarAgregar.className = "ocultar"
-  em.textContent = "aca va a aparecer el salario mayor, menor y promedio del grupo familiar";
-}
-
-function agregar() {
-  let br = document.createElement("br");
-  br.className = "br";
-  form.appendChild(br);
-
+function agregarFamiliares() {
   let label = document.createElement("label");
   label.textContent = "familiar agregado ";
-  label.className = "label-agregar";
+  label.className = "form-label";
+  label.id = "label-familiar";
   form.appendChild(label);
 
   let input = document.createElement("input");
   input.type = "number";
-  input.className = "input-agregar";
+  input.className = "form-control";
+  input.id = "input-familiar";
+  input.placeholder = "introduzca el salario";
   form.appendChild(input);
 }
 
 function validarSalario(inputs) {
-  let condicionDeCorte = true
-  let textoError = document.querySelector("#texto-error")
+  let condicionDeCorte = true;
+  let textoError = document.querySelector("#texto-error");
 
   inputs.forEach(function (input) {
-    let salario = Number(input.value)
-    let simboloNoPermitidos = /[a-z],\./.test(input)
+    let salario = Number(input.value);
+    let simboloNoPermitidos = /[a-z],\./.test(input);
 
     if (salario < 0) {
-      input.classList.add("error")
-      condicionDeCorte = false
+      input.style.border = "2px solid red";
+      condicionDeCorte = false;
+    } else if (salario == simboloNoPermitidos) {
+      input.style.border = "2px solid red";
+      condicionDeCorte = false;
     } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
+      input.style.border = "";
+      textoError.classList.replace("alert-danger", "ocultar");
     }
-    if (salario == simboloNoPermitidos) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-  })
+  });
 
   if (!condicionDeCorte) {
-    textoError.className = "texto-error"
+    textoError.className = "alert alert-danger";
   }
-  return condicionDeCorte
+  return condicionDeCorte;
 }
 
-function calcularSalario(arrayDeInputs) {
-  let em = document.querySelector("em");
-  em.textContent =
+function mostrarSalarios(salarios) {
+  let textoResultado = document.querySelector("em");
+  textoResultado.textContent =
     "el miembro con el salario mas alto cobra " +
-    calcularSalarioMayor(arrayDeInputs) +
+    calcularSalarioMayor(salarios) +
     " pesos, el miembro con el salario mas bajo cobra " +
-    calcularSalarioMenor(arrayDeInputs) +
+    calcularSalarioMenor(salarios) +
     " pesos, y el salario promedio en el grupo familiar es de " +
-    calcularSalarioPromedio(arrayDeInputs) +
+    calcularSalarioPromedio(salarios) +
     " pesos";
 }
 
-function calcularSalarioMayor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador >= arrayDeInputs[index]) {
+function calcularSalarioMayor(salarios) {
+  let numeroComparador = salarios[0];
+  for (let index = 0; index < salarios.length; index++) {
+    if (numeroComparador >= salarios[index]) {
       numeroComparador = numeroComparador;
     } else {
-      numeroComparador = arrayDeInputs[index];
+      numeroComparador = salarios[index];
     }
   }
   return numeroComparador;
 }
 
-function calcularSalarioMenor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
+function calcularSalarioMenor(salarios) {
+  let numeroComparador = salarios[0];
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador <= arrayDeInputs[index]) {
+  for (let index = 0; index < salarios.length; index++) {
+    if (numeroComparador <= salarios[index]) {
       numeroComparador = numeroComparador;
     } else {
-      numeroComparador = arrayDeInputs[index];
+      numeroComparador = salarios[index];
     }
   }
   return numeroComparador;
 }
 
-function calcularSalarioPromedio(arrayDeInputs) {
+function calcularSalarioPromedio(salarios) {
   let contador = 0;
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    contador = contador + arrayDeInputs[index];
+  for (let index = 0; index < salarios.length; index++) {
+    contador = contador + salarios[index];
   }
 
-  let salarioPromedio = contador / arrayDeInputs.length;
+  let salarioPromedio = contador / salarios.length;
 
   return salarioPromedio;
+}
+
+function eliminarTodo() {
+  resetearTextoResultado();
+  eliminarFamiliares();
+  ocultarTextoError();
+  ocultarBotones();
+}
+
+function resetearTextoResultado() {
+  let textoResultado = document.querySelector("em");
+  textoResultado.textContent =
+    "aca va a aparecer el salario mayor, menor y promedio del grupo familiar";
+}
+
+function eliminarFamiliares() {
+  let label = document.querySelectorAll("#label-familiar");
+  let input = document.querySelectorAll("#input-familiar");
+  label.forEach(function (label) {
+    label.remove();
+  });
+
+  input.forEach(function (input) {
+    input.remove();
+  });
+}
+
+function ocultarTextoError() {
+  let textoError = document.querySelector("#texto-error");
+  textoError.className = "ocultar";
+}
+
+function ocultarBotones() {
+  let ocultarCalcular = document.querySelector("#calcular");
+  let ocultarEliminar = document.querySelector("#eliminar");
+  let ocultarAgregar = document.querySelector("#agregar");
+  ocultarCalcular.className = "ocultar";
+  ocultarEliminar.className = "ocultar";
+  ocultarAgregar.className = "ocultar";
 }

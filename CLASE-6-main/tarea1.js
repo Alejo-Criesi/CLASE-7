@@ -15,132 +15,106 @@ let botonEliminar = document.querySelector("#eliminar");
 let botonEnviar = document.querySelector("#enviar");
 
 botonEnviar.onclick = function () {
-  enviar()
+  enviarFamiliares();
 };
 
 botonCalcular.onclick = function () {
-  calcular()
+  agruparEdades();
 };
 
 botonEliminar.onclick = function () {
-  eliminar()
+  eliminarTodo();
 };
 
-function enviar() {
+function enviarFamiliares() {
   let cantidadDeFamiliares = Number(document.querySelector("#cantidad").value);
-  let aparecerCalcular = document.querySelector("#calcular")
-  aparecerCalcular.className = "boton"
-  let aparecerEliminar = document.querySelector("#eliminar")
-  aparecerEliminar.className = "boton"
+  aparecerBotones();
+  crearFamiliares(cantidadDeFamiliares);
+}
 
+function aparecerBotones() {
+  let aparecerCalcular = document.querySelector("#calcular");
+  aparecerCalcular.className = "btn btn-primary";
+  let aparecerEliminar = document.querySelector("#eliminar");
+  aparecerEliminar.className = "btn btn-primary";
+}
+
+function crearFamiliares(cantidadDeFamiliares) {
   for (let index = 0; index < cantidadDeFamiliares; index++) {
     let label = document.createElement("label");
-    label.textContent = "familiar " + (index + 1);
-    label.className = "label-familiar";
+    label.textContent = "Familiar " + (index + 1);
+    label.className = "form-label";
+    label.id = "label-familiar";
     let input = document.createElement("input");
     input.type = "number";
-    input.className = "input-familiar";
-    let br = document.createElement("br");
-    br.className = "br";
-    div.appendChild(br);
+    input.className = "form-control";
+    input.id = "input-familiar";
+    input.placeholder = "introduza la edad";
     div.appendChild(label);
     div.appendChild(input);
   }
 }
 
-function calcular() {
-  let inputs = document.querySelectorAll(".input-familiar");
-  let arrayDeInputs = [];
+function agruparEdades() {
+  let inputs = document.querySelectorAll("#input-familiar");
+  let edades = [];
   let valorDelInput;
 
   for (let index = 0; index < inputs.length; index++) {
     valorDelInput = Number(inputs[index].value);
-    arrayDeInputs.push(valorDelInput);
+    edades.push(valorDelInput);
   }
 
   if (validarEdad(inputs)) {
-    calcularEdad(arrayDeInputs)
+    mostrarEdades(edades);
   }
-}
-
-function eliminar() {
-  let ocultarCalcular = document.querySelector("#calcular")
-  let ocultarEliminar = document.querySelector("#eliminar")
-  let em = document.querySelector("em");
-  let labels = document.querySelectorAll(".label-familiar");
-  let inputs = document.querySelectorAll(".input-familiar");
-  let textoError = document.querySelector(".texto-error")
-  let br = document.querySelectorAll(".br");
-
-  labels.forEach(function (label) {
-    label.remove();
-  })
-
-  inputs.forEach(function (input) {
-    input.remove();
-  })
-
-  br.forEach(function (br) {
-    br.remove();
-  })
-
-  ocultarCalcular.className = "ocultar"
-  ocultarEliminar.className = "ocultar"
-  em.textContent =
-    "aca va a aparecer la edad mayor, menor y la promedio del grupo familiar"
-  textoError.className = "ocultar"
 }
 
 function validarEdad(inputs) {
-  let condicionDeCorte = true
-  let textoError = document.querySelector("#texto-error")
+  let condicionDeCorte = true;
+  let textoError = document.querySelector("#texto-error");
 
   inputs.forEach(function (input) {
-    let edad = Number(input.value)
-    let simboloNoPermitidos = /[a-z],\./.test(edad)
+    let edad = Number(input.value);
+    let simboloNoPermitidos = /[a-z],\./.test(edad);
 
-    if (edad <= 0) {
-      input.classList.add("error")
-      condicionDeCorte = false
+    if (edad < 0) {
+      input.style.border = "2px solid red";
+      condicionDeCorte = false;
+    } else if (edad == simboloNoPermitidos) {
+      input.style.border = "2px solid red";
+      condicionDeCorte = false;
     } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
+      input.style.border = "";
+      textoError.classList.replace("alert-danger", "ocultar");
     }
-
-    if (edad == simboloNoPermitidos) {
-      input.classList.add("error")
-      condicionDeCorte = false
-    } else {
-      input.classList.toggle("error", false)
-      textoError.classList.replace("texto-error", "ocultar")
-    }
-  })
+  });
 
   if (!condicionDeCorte) {
-    textoError.className = "texto-error"
+    textoError.className = "alert alert-danger";
   }
 
-  return condicionDeCorte
+  return condicionDeCorte;
 }
 
-function calcularEdad(arrayDeInputs) {
-  let em = document.querySelector("em");
-  em.textContent =
+function mostrarEdades(edades) {
+  let textoResultado = document.querySelector("em");
+  textoResultado.textContent =
     "el miembro con mas edad tiene " +
-    calcularEdadMayor(arrayDeInputs) +
+    calcularEdadMayor(edades) +
     " años, el miembro menor tiene " +
-    calcularEdadMenor(arrayDeInputs) +
+    calcularEdadMenor(edades) +
     " años y la edad promedio en el grupo familiar es de " +
-    calcularEdadPromedio(arrayDeInputs) +
+    calcularEdadPromedio(edades) +
     " años";
 }
 
-function calcularEdadMayor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
+function calcularEdadMayor(edades) {
+  let numeroComparador = edades[0];
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador <= arrayDeInputs[index]) {
-      numeroComparador = arrayDeInputs[index];
+  for (let index = 0; index < edades.length; index++) {
+    if (numeroComparador <= edades[index]) {
+      numeroComparador = edades[index];
     } else {
       numeroComparador = numeroComparador;
     }
@@ -148,12 +122,12 @@ function calcularEdadMayor(arrayDeInputs) {
   return numeroComparador;
 }
 
-function calcularEdadMenor(arrayDeInputs) {
-  let numeroComparador = arrayDeInputs[0];
+function calcularEdadMenor(edades) {
+  let numeroComparador = edades[0];
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    if (numeroComparador >= arrayDeInputs[index]) {
-      numeroComparador = arrayDeInputs[index];
+  for (let index = 0; index < edades.length; index++) {
+    if (numeroComparador >= edades[index]) {
+      numeroComparador = edades[index];
     } else {
       numeroComparador = numeroComparador;
     }
@@ -161,14 +135,52 @@ function calcularEdadMenor(arrayDeInputs) {
   return numeroComparador;
 }
 
-function calcularEdadPromedio(arrayDeInputs) {
+function calcularEdadPromedio(edades) {
   let contador = 0;
 
-  for (let index = 0; index < arrayDeInputs.length; index++) {
-    contador = contador + arrayDeInputs[index];
+  for (let index = 0; index < edades.length; index++) {
+    contador = contador + edades[index];
   }
 
-  let edadPromedio = contador / arrayDeInputs.length;
+  let edadPromedio = contador / edades.length;
 
   return edadPromedio;
+}
+
+function eliminarTodo() {
+  resetearTextoResultado();
+  ocultarBotones();
+  eliminarFamiliares();
+  ocultarTextoError();
+}
+
+function resetearTextoResultado() {
+  let textoResultado = document.querySelector("em");
+  textoResultado.textContent =
+    "aca va a aparecer la edad mayor, menor y la promedio del grupo familiar";
+}
+
+function ocultarBotones() {
+  let ocultarCalcular = document.querySelector("#calcular");
+  let ocultarEliminar = document.querySelector("#eliminar");
+  ocultarCalcular.className = "ocultar";
+  ocultarEliminar.className = "ocultar";
+}
+
+function eliminarFamiliares() {
+  let labels = document.querySelectorAll("#label-familiar");
+  let inputs = document.querySelectorAll("#input-familiar");
+
+  labels.forEach(function (label) {
+    label.remove();
+  });
+
+  inputs.forEach(function (input) {
+    input.remove();
+  });
+}
+
+function ocultarTextoError() {
+  let textoError = document.querySelector("#texto-error");
+  textoError.className = "ocultar";
 }
